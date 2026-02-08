@@ -147,7 +147,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         HashMap<String, Object> projectMap = shownProjects.get(position);
         String scId = yB.c(projectMap, "sc_id");
 
-        holder.binding.imgIcon.setImageResource(R.drawable.default_icon);
+        holder.binding.imgIcon.setImageResource(R.drawable.ic_mtrl_android);
 
         if (yB.c(projectMap, "sc_ver_code").isEmpty()) {
             projectMap.put("sc_ver_code", "1");
@@ -169,7 +169,7 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
                 uri = FileProvider.getUriForFile(activity, providerPath, iconFile);
                 holder.binding.imgIcon.setImageURI(uri);
             } else {
-                holder.binding.imgIcon.setImageResource(R.drawable.default_icon);
+                holder.binding.imgIcon.setImageResource(R.drawable.ic_mtrl_android);
             }
         }
 
