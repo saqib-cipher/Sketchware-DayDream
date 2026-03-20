@@ -855,6 +855,11 @@ public class Jx {
                     addImport("com.android.billingclient.api.*");
                 }
 
+                if (DRFeatureManager.isRetrofit2Enabled(Configs.currentProjectID, projectFileBean.fileName)) {
+                    addImport("retrofit2.*");
+                }
+
+
                 if (DRProjectView.isActivityLauncher(DRProjectTracker.getCurrentprojectID(), projectFileBean.fileName)) {
                     if (DRFeatureManager.isOneSignalEnabled(Configs.currentProjectID, projectFileBean.fileName)) {
                         addImport("com.onesignal.Continue");

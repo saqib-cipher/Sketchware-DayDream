@@ -229,6 +229,7 @@ public class BuiltInLibraries {
     public static String PLAY_SERVICES_TASKS = "play-services-tasks-18.3.2";
 //    public static String SLF4J_API = "slf4j-api-2.0.16";
 //    public static String SUPABASE_KT_ANDROID = "supabase-kt-android-3.0.2";
+    public static String RETROFIT2 = "retrofit-2.12.0";
     public static String SPOTBUGS_ANNOTATIONS = "spotbugs-annotations-4.9.8";
     public static String USER_MESSAGING_PLATFORM = "user-messaging-platform-2.0.0";
     public static String WAVE_SIDE_BAR = "wave-side-bar";
@@ -636,6 +637,10 @@ public class BuiltInLibraries {
             //==========Lottie==========
             new BuiltInLibrary(LOTTIE, List.of(ANDROIDX_APPCOMPAT, OKIO), "com.airbnb.lottie"),
             //==========Lottie==========
+
+            //==========Retrofit2==========
+            new BuiltInLibrary(RETROFIT2, List.of(OKHTTP)),
+            //==========Retrofit2==========
 
             //==========Okhttp==========
             new BuiltInLibrary(OKHTTP, List.of(OKIO_JVM)),

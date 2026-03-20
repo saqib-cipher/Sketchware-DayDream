@@ -34,6 +34,9 @@ object DRGradleManager {
         if (DRFeatureManager.isAndroidBillingEnabled(DRProjectTracker.currentprojectID, null))
             content.append("implementation 'com.android.billingclient:billing:8.2.0'\r\n")
 
+        if (DRFeatureManager.isRetrofit2Enabled(DRProjectTracker.currentprojectID, null))
+            content.append("implementation 'com.squareup.retrofit2:retrofit:2.12.0'\r\n")
+
         if (DRFeatureManager.isOneSignalEnabled(DRProjectTracker.currentprojectID, null))
             content.append("implementation 'com.onesignal:OneSignal:5.4.1'\r\n")
 

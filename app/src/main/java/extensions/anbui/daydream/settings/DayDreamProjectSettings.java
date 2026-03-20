@@ -145,6 +145,16 @@ public class DayDreamProjectSettings {
         setDataBoolean(projectID, activityName, "importAndroidBilling", isEnable);
     }
 
+    public static boolean isImportRetrofit2(String projectID, String activityName) {
+        Log.i(TAG, "isImportRetrofit2: " + projectID + " " + activityName);
+        return getDataBoolean(projectID, ProjectUtils.convertJavaNameToXMLName(activityName), "importRetrofit2");
+    }
+
+    public static void setImportRetrofit2(String projectID, String activityName, boolean isEnable) {
+        Log.i(TAG, "setImportRetrofit2: " + projectID + " " + activityName + " " + isEnable);
+        setDataBoolean(projectID, activityName, "importRetrofit2", isEnable);
+    }
+
     //Universal settings
 
     public static boolean isEnableDayDream(String projectID) {
@@ -325,6 +335,16 @@ public class DayDreamProjectSettings {
     public static void setUseAndroidBilling(String projectID, boolean isEnable) {
         Log.i(TAG, "setUseAndroidBilling: " + projectID + " " + isEnable);
         setUniversalSettings(projectID, "useAndroidBilling", isEnable);
+    }
+
+    public static boolean isUseRetrofit2(String projectID) {
+        Log.i(TAG, "isUseRetrofit2: " + projectID);
+        return getUniversalSettings(projectID, "useRetrofit2");
+    }
+
+    public static void setUseRetrofit2(String projectID, boolean isEnable) {
+        Log.i(TAG, "setUseRetrofit2: " + projectID + " " + isEnable);
+        setUniversalSettings(projectID, "useRetrofit2", isEnable);
     }
 
     public static boolean isUseTheme(String projectID) {

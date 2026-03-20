@@ -791,6 +791,9 @@ public class ProjectBuilder {
                 if (DRFeatureManager.isAndroidBillingEnabled(Configs.currentProjectID, null))
                     builtInLibraryManager.addLibrary(BuiltInLibraries.ANDROID_BILLING);
 
+                if (DRFeatureManager.isRetrofit2Enabled(Configs.currentProjectID, null))
+                    builtInLibraryManager.addLibrary(BuiltInLibraries.RETROFIT2);
+
                 if (DRFeatureManager.isOneSignalEnabled(Configs.currentProjectID, null)) {
                     builtInLibraryManager.addLibrary(BuiltInLibraries.ONESIGNAL_CORE);
                     builtInLibraryManager.addLibrary(BuiltInLibraries.ONESIGNAL_LOCATION);

@@ -243,6 +243,19 @@ object DRFeatureManager {
     }
 
     @JvmStatic
+    fun isRetrofit2Enabled(projectID: String, activityName: String?): Boolean {
+        if (DayDreamProjectSettings.isEnableDayDream(projectID)) {
+            return DayDreamProjectSettings.isUseRetrofit2(projectID)
+                    && if (activityName.isNullOrEmpty())
+                true
+            else
+                DayDreamProjectSettings.isImportRetrofit2(projectID, activityName)
+        }
+
+        return false
+    }
+
+    @JvmStatic
     fun isNeedAddNetworkPermision(projectID: String): Boolean {
         if (DayDreamProjectSettings.isEnableDayDream(projectID)) {
             return (DayDreamProjectSettings.isUniversalUseMedia3(projectID) && LibraryUtils.isAllowUseAndroidXMedia3(
@@ -254,6 +267,7 @@ object DRFeatureManager {
                     || (DayDreamProjectSettings.isUniversalUseAndroidXCredentialManager(projectID)) && LibraryUtils.isAllowUseAndroidXCredentialManager(
                 projectID
             )
+                    || DayDreamProjectSettings.isUseRetrofit2(projectID)
         }
 
         return false

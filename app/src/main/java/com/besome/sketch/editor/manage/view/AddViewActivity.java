@@ -190,6 +190,7 @@ public class AddViewActivity extends BaseAppCompatActivity {
             binding.swImportshizuku.setChecked(DayDreamProjectSettings.isImportShizuku(Configs.currentProjectID, projectFileBean.fileName));
             binding.swImportglidetransformations.setChecked(DayDreamProjectSettings.isImportGlideTransformations(Configs.currentProjectID, projectFileBean.fileName));
             binding.swImportandroidbilling.setChecked(DayDreamProjectSettings.isImportAndroidBilling(Configs.currentProjectID, projectFileBean.fileName));
+            binding.swImportretrofit2.setChecked(DayDreamProjectSettings.isImportRetrofit2(Configs.currentProjectID, projectFileBean.fileName));
         }
 
         binding.lnEdgetoedge.setOnClickListener(v -> binding.edgetoedge.toggle());
@@ -203,6 +204,7 @@ public class AddViewActivity extends BaseAppCompatActivity {
         binding.lnImportshizuku.setOnClickListener(v -> binding.swImportshizuku.toggle());
         binding.lnImportglidetransformations.setOnClickListener(v -> binding.swImportglidetransformations.toggle());
         binding.lnImportandroidbilling.setOnClickListener(v -> binding.swImportandroidbilling.toggle());
+        binding.lnImportretrofit2.setOnClickListener(v -> binding.swImportretrofit2.toggle());
 
         if (!ProjectLibrary.isEnabledAppCompat(Configs.currentProjectID)) {
             binding.lnEdgetoedge.setEnabled(false);
@@ -229,16 +231,18 @@ public class AddViewActivity extends BaseAppCompatActivity {
             }
         }
 
-        if (DayDreamProjectSettings.isEnableDayDream(Configs.currentProjectID) && DayDreamProjectSettings.isUniversalDisableAutomaticPermissionRequests(Configs.currentProjectID)) {
-            binding.lnDisableautomaticpermissionrequests.setEnabled(false);
-            binding.lnDisableautomaticpermissionrequests.setAlpha(0.5f);
-            binding.tvDisableautomaticpermissionrequestsnote.setText("It is enabled and cannot be changed because it applies to the entire project. " + binding.tvDisableautomaticpermissionrequestsnote.getText().toString());
-        }
+        if (DayDreamProjectSettings.isEnableDayDream(Configs.currentProjectID)) {
+            if (DayDreamProjectSettings.isUniversalDisableAutomaticPermissionRequests(Configs.currentProjectID)) {
+                binding.lnDisableautomaticpermissionrequests.setEnabled(false);
+                binding.lnDisableautomaticpermissionrequests.setAlpha(0.5f);
+                binding.tvDisableautomaticpermissionrequestsnote.setText("It is enabled and cannot be changed because it applies to the entire project. " + binding.tvDisableautomaticpermissionrequestsnote.getText().toString());
+            }
 
-        if (DayDreamProjectSettings.isEnableDayDream(Configs.currentProjectID) && DayDreamProjectSettings.isUniversalContentProtection(Configs.currentProjectID)) {
-            binding.lnContentprotection.setEnabled(false);
-            binding.lnContentprotection.setAlpha(0.5f);
-            binding.tvContentprotectionnote.setText("It is enabled and cannot be changed because it applies to the entire project. " + binding.tvContentprotectionnote.getText().toString());
+            if (DayDreamProjectSettings.isUniversalContentProtection(Configs.currentProjectID)) {
+                binding.lnContentprotection.setEnabled(false);
+                binding.lnContentprotection.setAlpha(0.5f);
+                binding.tvContentprotectionnote.setText("It is enabled and cannot be changed because it applies to the entire project. " + binding.tvContentprotectionnote.getText().toString());
+            }
         }
 
         if (!(DayDreamProjectSettings.isEnableDayDream(Configs.currentProjectID)
@@ -282,6 +286,11 @@ public class AddViewActivity extends BaseAppCompatActivity {
             binding.lnImportandroidbilling.setVisibility(View.GONE);
         }
 
+        if (!(DayDreamProjectSettings.isEnableDayDream(Configs.currentProjectID)
+                && DayDreamProjectSettings.isUseRetrofit2(Configs.currentProjectID))) {
+            binding.lnImportretrofit2.setVisibility(View.GONE);
+        }
+
         binding.lnClone.setOnClickListener(v -> {
             Intent intent = new Intent(this, DayDreamCloneClassActivity.class);
             intent.putExtra("sc_id", Configs.currentProjectID);
@@ -323,6 +332,7 @@ public class AddViewActivity extends BaseAppCompatActivity {
         DayDreamProjectSettings.setImportShizuku(Configs.currentProjectID, filename, binding.swImportshizuku.isChecked());
         DayDreamProjectSettings.setImportGlideTransformations(Configs.currentProjectID, filename, binding.swImportglidetransformations.isChecked());
         DayDreamProjectSettings.setImportAndroidBilling(Configs.currentProjectID, filename, binding.swImportandroidbilling.isChecked());
+        DayDreamProjectSettings.setImportRetrofit2(Configs.currentProjectID, filename, binding.swImportretrofit2.isChecked());
     }
 
     @Override
