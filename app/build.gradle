@@ -149,7 +149,7 @@ dependencies {
 
     //noinspection GradleDependency copied from above dependency for not just runtime access
     android26Implementation "com.google.protobuf:protobuf-java:3.19.2"
-    android33Implementation "com.google.protobuf:protobuf-java:4.33.2"
+    android33Implementation "com.google.protobuf:protobuf-java:4.34.0"
     //noinspection GradleDependency
     android26Implementation("com.android.tools:sdklib:25.3.0") {
         exclude group: "com.intellij", module: "annotations"
@@ -189,7 +189,7 @@ dependencies {
     android26Implementation("com.github.javaparser:javaparser-symbol-solver-core:3.25.3") {
         exclude group: "com.google.guava", module: "guava"
     }
-    android33Implementation("com.github.javaparser:javaparser-symbol-solver-core:3.27.1") {
+    android33Implementation("com.github.javaparser:javaparser-symbol-solver-core:3.28.0") {
         exclude group: "com.google.guava", module: "guava"
     }
 

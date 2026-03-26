@@ -1328,9 +1328,11 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
                 });
             } catch (zy zy) {
                 activity.indicateCompileErrorOccurred(zy.getMessage());
+                Log.e("DesignActivity$BuildTask", "", zy);
             } catch (Throwable tr) {
                 LogUtil.e("DesignActivity$BuildTask", "Failed to build project", tr);
                 activity.indicateCompileErrorOccurred(Log.getStackTraceString(tr));
+                Log.e("DesignActivity$BuildTask", "", tr);
             } finally {
                 Configs.isBuilding = false;
                 isCanceling = false;
