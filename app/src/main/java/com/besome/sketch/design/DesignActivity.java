@@ -1336,7 +1336,11 @@ public class DesignActivity extends BaseAppCompatActivity implements View.OnClic
                 isCanceling = false;
                 isBuilding = false;
                 activity.runOnUiThread(this::onPostExecute);
-                DRSettings.getAutoCleanUpAfterBuild(activity, isClean -> new Thread(() -> CleanUpCore.cleanUpAfterBuildInDesign(sc_id)).start());
+                DRSettings.getAutoCleanUpAfterBuild(activity, isClean -> {
+                    if (isClean) {
+                        new Thread(() -> CleanUpCore.cleanUpAfterBuildInDesign(sc_id)).start();
+                    }
+                });
             }
         }
 

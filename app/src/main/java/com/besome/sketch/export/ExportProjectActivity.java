@@ -1027,7 +1027,11 @@ public class ExportProjectActivity extends BaseAppCompatActivity {
                 cancel(true);
             } finally {
                 Configs.isBuilding = false;
-                DRSettings.getAutoCleanUpAfterBuild(a.getApplicationContext(), isClean -> new Thread(() -> CleanUpCore.removeTemporaryFiles(sc_id)).start());
+                DRSettings.getAutoCleanUpAfterBuild(a.getApplicationContext(), isClean -> {
+                    if (isClean) {
+                        new Thread(() -> CleanUpCore.cleanUpAfterBuildInDesign(sc_id)).start();
+                    }
+                });
             }
         }
 
@@ -1353,7 +1357,11 @@ public class ExportProjectActivity extends BaseAppCompatActivity {
             });
         } finally {
             Configs.isBuilding = false;
-            DRSettings.getAutoCleanUpAfterBuild(this, isClean -> new Thread(() -> CleanUpCore.removeTemporaryFiles(sc_id)).start());
+            DRSettings.getAutoCleanUpAfterBuild(this, isClean -> {
+                if (isClean) {
+                    new Thread(() -> CleanUpCore.cleanUpAfterBuildInDesign(sc_id)).start();
+                }
+            });
         }
     }
 

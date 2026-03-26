@@ -79,7 +79,11 @@ public class ExportSource {
 
             updateStatus(statusTextView, "Exported source code for Android Studio.");
 
-            DRSettings.getAutoCleanUpAfterBuild(activity, isClean -> new Thread(() -> CleanUpCore.removeTemporaryFiles(sc_id)).start());
+            DRSettings.getAutoCleanUpAfterBuild(activity, isClean -> {
+                if (isClean) {
+                    new Thread(() -> CleanUpCore.cleanUpAfterBuildInDesign(sc_id)).start();
+                }
+            });
 
             return true;
         } catch (Exception e) {
