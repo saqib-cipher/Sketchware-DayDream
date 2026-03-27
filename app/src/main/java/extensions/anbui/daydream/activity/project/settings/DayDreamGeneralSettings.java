@@ -53,6 +53,7 @@ public class DayDreamGeneralSettings extends AppCompatActivity {
         binding.lnPermissionsettings.setOnClickListener(v -> goToSettings(PermissionSettings.class));
         binding.lnGooglesettings.setOnClickListener(v -> goToSettings(GoogleSettings.class));
         binding.lnBackup.setOnClickListener(v -> goToSettings(DayDreamBackupTool.class));
+        binding.lnLayoutsettings.setOnClickListener(v -> goToSettings(LayoutSettings.class));
 
         if (LibraryUtils.isAllowUseTheme(projectID)) {
             binding.lnThemesettings.setOnClickListener(v -> goToSettings(ThemeSettings.class));
@@ -77,6 +78,7 @@ public class DayDreamGeneralSettings extends AppCompatActivity {
         binding.lnPermissionsettings.setEnabled(isEnable);
         binding.lnSecuritysettings.setEnabled(isEnable);
         binding.lnBackup.setEnabled(isEnable);
+        binding.lnLayoutsettings.setEnabled(isEnable);
     }
 
     private void goToSettings(Class<?> cls) {

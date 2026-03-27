@@ -386,6 +386,17 @@ public class DayDreamProjectSettings {
         Log.i(TAG, "setThemeDayNight: " + projectID + " " + value);
         setUniversalSettingsInt(projectID, "themeDayNight", value);
     }
+
+    public static boolean getAdvancedPadding(String projectID) {
+        Log.i(TAG, "getAdvancedPadding: " + projectID);
+        return getUniversalSettings(projectID, "advancedPadding");
+    }
+
+    public static void setAdvancedPadding(String projectID, boolean value) {
+        Log.i(TAG, "setAdvancedPadding: " + projectID + " " + value);
+        setUniversalSettings(projectID, "advancedPadding", value);
+    }
+
     //Read and write universal settings
     public static boolean getUniversalSettings(String projectID, String settingName) {
         Log.i(TAG, "getUniversalSettings: " + projectID + " " + settingName);
