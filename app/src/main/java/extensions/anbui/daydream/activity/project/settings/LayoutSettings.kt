@@ -1,6 +1,7 @@
 package extensions.anbui.daydream.activity.project.settings
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import extensions.anbui.daydream.project.DRProjectTracker.startNow
@@ -10,6 +11,14 @@ import pro.sketchware.databinding.ActivityDaydreamLayoutSettingsBinding
 class LayoutSettings : AppCompatActivity() {
     private var projectID: String? = null
     private lateinit var binding: ActivityDaydreamLayoutSettingsBinding
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressedDispatcher.onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

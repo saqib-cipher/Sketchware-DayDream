@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -39,26 +38,12 @@ public class DayDreamBackupTool extends AppCompatActivity {
     private String projectID;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(1, 1, 1, getString(R.string.common_word_create)).setShortcut('3', 'c').setIcon(R.drawable.ic_mtrl_check).setShowAsAction(1);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        return switch (item.getItemId()) {
-            case 1 -> {
-                startBackup();
-                yield true;
-            }
-            case android.R.id.home -> {
-                onBackPressed();
-                yield true;
-            }
-            default -> super.onOptionsItemSelected(item);
-        };
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -84,18 +69,23 @@ public class DayDreamBackupTool extends AppCompatActivity {
         binding.lnCustomblocks.setOnClickListener(v -> binding.swCustomblocks.toggle());
         binding.lnApis.setOnClickListener(v -> binding.swApis.toggle());
 
+        if (!DayDreamGitConfigs.isSettedUp(projectID)) {
+            binding.lnGit.setVisibility(View.GONE);
+            binding.lnApis.setBackgroundResource(R.drawable.item_shape_bottom_high);
+        } else {
+            binding.lnGit.setOnClickListener(v -> binding.swGit.toggle());
+        }
+
         if (!isUsingAnyLocalLibrary(projectID)) {
             binding.swLocallibraries.setChecked(false);
             binding.lnLocallibraries.setVisibility(View.GONE);
+
+            binding.lnCustomblocks.setBackgroundResource(R.drawable.item_shape_top_high);
         } else {
             binding.lnLocallibraries.setOnClickListener(v -> binding.swLocallibraries.toggle());
         }
 
-        if (!DayDreamGitConfigs.isSettedUp(projectID)) {
-            binding.lnGit.setVisibility(View.GONE);
-        } else {
-            binding.lnGit.setOnClickListener(v -> binding.swGit.toggle());
-        }
+        binding.btnDone.setOnClickListener(v -> startBackup());
 
         binding.collapsingtoolbarlayout.setSubtitle("for " + GetProjectInfo.getProjectName(projectID) + ".");
 

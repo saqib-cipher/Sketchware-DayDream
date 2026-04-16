@@ -13,22 +13,13 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/DayDream.CollapsingToolbarLarge"
             app:title="User interface"
             app:subtitle="for your project.">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                style="@style/DayDram.CollapsingMaterialToolbar"
+                android:id="@+id/toolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -42,14 +33,17 @@
             android:id="@+id/ln_all_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_edgetoedge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/item_shape_top_high"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -90,8 +84,9 @@
                 android:id="@+id/ln_windowinsetshandling"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/item_shape_middle_high"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -132,8 +127,9 @@
                 android:id="@+id/ln_enableandroidtextcolorremoval"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/item_shape_middle_high"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -173,7 +169,7 @@
                 android:id="@+id/ln_enableOnBackInvokedCallback"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/item_shape_bottom_high"
                 android:padding="16dp">
 
                 <LinearLayout

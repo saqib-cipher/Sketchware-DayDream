@@ -1,6 +1,7 @@
 package extensions.anbui.daydream.activity.project.settings;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.activity.EdgeToEdge;
@@ -18,6 +19,15 @@ public class GoogleSettings extends AppCompatActivity {
 
     private String projectID;
     private ActivityDaydreamGoogleSettingsBinding binding;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

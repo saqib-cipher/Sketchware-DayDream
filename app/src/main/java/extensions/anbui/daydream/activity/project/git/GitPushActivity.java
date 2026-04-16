@@ -2,7 +2,6 @@ package extensions.anbui.daydream.activity.project.git;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -13,7 +12,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.besome.sketch.export.ExportProjectActivity;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Objects;
@@ -36,26 +34,12 @@ public class GitPushActivity extends AppCompatActivity {
     private boolean isDiffChecked = false;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(1, 1, 1, getString(R.string.common_word_create)).setShortcut('3', 'c').setIcon(R.drawable.ic_mtrl_check).setShowAsAction(1);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        return switch (item.getItemId()) {
-            case 1 -> {
-                pushProject();
-                yield true;
-            }
-            case android.R.id.home -> {
-                onBackPressed();
-                yield true;
-            }
-            default -> super.onOptionsItemSelected(item);
-        };
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -91,6 +75,7 @@ public class GitPushActivity extends AppCompatActivity {
         binding.lnLocallibraries.setOnClickListener(v -> binding.swLocallibraries.toggle());
         binding.lnCustomblocks.setOnClickListener(v -> binding.swCustomblocks.toggle());
         binding.lnApis.setOnClickListener(v -> binding.swApis.toggle());
+        binding.btnDone.setOnClickListener(v -> pushProject());
 
         String[] options = new String[] {"All", "Project only", "Source code only"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(

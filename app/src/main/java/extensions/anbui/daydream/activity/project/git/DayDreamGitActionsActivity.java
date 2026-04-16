@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +42,15 @@ public class DayDreamGitActionsActivity extends AppCompatActivity {
     private boolean isDiff = false;
     private boolean isDiffChecked = false;
     private boolean isCompleteAnAction = false;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +113,11 @@ public class DayDreamGitActionsActivity extends AppCompatActivity {
         binding.lnQuickllook.setVisibility(isReady ? View.VISIBLE : View.GONE);
 
         if (!isReady) {
+            binding.lnClone.setBackgroundResource(R.drawable.item_shape_bottom_high);
             if (showDialog)
                cloneProject();
         } else {
+            binding.lnClone.setBackgroundResource(R.drawable.item_shape_middle_high);
             checkDiff();
         }
     }

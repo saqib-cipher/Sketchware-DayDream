@@ -14,22 +14,13 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/DayDream.CollapsingToolbarLarge"
             app:title="Theme"
             app:subtitle="for your project.">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                style="@style/DayDram.CollapsingMaterialToolbar"
+                android:id="@+id/toolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -60,7 +51,7 @@
                     android:animateLayoutChanges="true">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Title"
+                        android:textSize="18sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -159,7 +150,7 @@
                     android:padding="16dp">
 
                     <TextView
-                        style="@style/TextAppearance.AppCompat.Title"
+                        android:textSize="18sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Light or dark mode" />
@@ -228,7 +219,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="?attr/colorSurface"
+        android:background="?attr/colorSurfaceContainerLow"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.card.MaterialCardView
@@ -236,8 +227,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        app:cardCornerRadius="25dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:cardCornerRadius="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -246,7 +237,9 @@
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="15dp">
+            android:paddingVertical="16dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:layout_width="0dp"

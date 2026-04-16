@@ -2,6 +2,7 @@ package extensions.anbui.daydream.activity.project.settings
 
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.MenuItem
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.addCallback
 import androidx.activity.enableEdgeToEdge
@@ -11,6 +12,14 @@ import pro.sketchware.databinding.ActivityDaydreamUniversalSettingsBinding
 
 class DayDreamUniversalSettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDaydreamUniversalSettingsBinding
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressedDispatcher.onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

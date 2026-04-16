@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -35,32 +34,12 @@ public class GitConfigsActivity extends AppCompatActivity {
     private boolean isNew = false;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(1, 1, 1, getString(R.string.common_word_create)).setShortcut('3', 'c').setIcon(R.drawable.ic_mtrl_check).setShowAsAction(1);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        return switch (item.getItemId()) {
-            case 1 -> {
-                if (isChanged()) {
-                    startSwitch();
-                } else {
-                    saveData();
-                    if (isNew) startActivity(new Intent(this, DayDreamGitActionsActivity.class).putExtra("sc_id", projectID));
-                    onBackPressed();
-                }
-                yield true;
-            }
-            case android.R.id.home -> {
-                onBackPressed();
-                yield true;
-            }
-            default -> super.onOptionsItemSelected(item);
-        };
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -88,6 +67,15 @@ public class GitConfigsActivity extends AppCompatActivity {
         binding.etToken.setText(DayDreamGitConfigs.getGitHubToken(projectID));
         binding.etRurl.setText(DayDreamGitConfigs.getRemoteUrl(projectID));
         binding.etBranch.setText(DayDreamGitConfigs.getBranch(projectID));
+        binding.btnDone.setOnClickListener(v -> {
+            if (isChanged()) {
+                startSwitch();
+            } else {
+                saveData();
+                if (isNew) startActivity(new Intent(this, DayDreamGitActionsActivity.class).putExtra("sc_id", projectID));
+                onBackPressed();
+            }
+        });
     }
 
     private void saveData() {

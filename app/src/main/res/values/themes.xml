@@ -71,4 +71,9 @@
         <item name="android:statusBarColor">@android:color/black</item>
     </style>
     <style name="Platform.Theme.SketchwarePro" parent="Platform.V21.Theme.SketchwarePro" />
+
+    <style name="DayDreamTheme" parent="Theme.Material3Expressive.DynamicColors.DayNight.NoActionBar">
+        <item name="android:windowBackground">?attr/colorSurfaceContainerLow</item>
+        <item name="materialSwitchStyle">@style/DayDream.MaterialSwitch</item>
+    </style>
 </resources>

@@ -14,22 +14,35 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingtoolbarlayout"
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/DayDream.CollapsingToolbarLarge"
             app:title="Backup"
-            app:subtitle="for unknown.">
+            app:subtitle="for unknown."
+            app:toolbarId="@id/toolbar">
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_collapseMode="pin">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    style="@style/DayDram.CollapsingMaterialToolbar"
+                    android:layout_width="0dp"
+                    android:layout_weight="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_done"
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
+                    android:padding="8dp"
+                    app:icon="@drawable/ic_mtrl_check"
+                    app:iconGravity="textStart"
+                    app:iconSize="24dp" />
+            </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -43,6 +56,8 @@
             android:id="@+id/ln_all_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -50,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Backup file name"
                 app:startIconDrawable="@drawable/ic_mtrl_edit"
-                android:padding="16dp">
+                android:paddingBottom="16dp">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/ed_backupfilename"
                     android:layout_width="match_parent"
@@ -62,8 +77,9 @@
                 android:id="@+id/ln_locallibraries"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/item_shape_top_high"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -105,8 +121,9 @@
                 android:id="@+id/ln_customblocks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/item_shape_middle_high"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -148,8 +165,9 @@
                 android:id="@+id/ln_apis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/item_shape_middle_high"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -191,7 +209,7 @@
                 android:id="@+id/ln_git"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/item_shape_bottom_high"
                 android:padding="16dp">
 
                 <LinearLayout

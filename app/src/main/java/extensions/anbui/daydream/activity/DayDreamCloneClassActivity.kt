@@ -5,21 +5,21 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.besome.sketch.design.DesignActivity
 import extensions.anbui.daydream.configs.Configs
-import extensions.anbui.daydream.ui.DialogUtils
 import extensions.anbui.daydream.file.FileUtils
 import extensions.anbui.daydream.project.ProjectDecryptor
 import extensions.anbui.daydream.project.ProjectUnsavedData
 import extensions.anbui.daydream.settings.DayDreamProjectSettings
 import extensions.anbui.daydream.tools.ToolCore
+import extensions.anbui.daydream.ui.DialogUtils
 import pro.sketchware.R
 import pro.sketchware.databinding.ActivityDaydreamCloneClassBinding
+
 
 class DayDreamCloneClassActivity : AppCompatActivity() {
 
@@ -28,27 +28,12 @@ class DayDreamCloneClassActivity : AppCompatActivity() {
     var currentName = ""
     var currentViewData = ""
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menu.add(1, 1, 1, "Done").setShortcut('3', 'c')
-            .setIcon(R.drawable.ic_mtrl_check).setShowAsAction(1)
-        return true
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            1 -> {
-                startClone()
-                true
-            }
-
-            android.R.id.home -> {
-                finish()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
+        if (item.itemId == android.R.id.home) {
+            onBackPressedDispatcher.onBackPressed()
+            return true
         }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,6 +95,8 @@ class DayDreamCloneClassActivity : AppCompatActivity() {
                 //;)
             }
         })
+
+        binding.btnDone.setOnClickListener { _ -> startClone() }
 
         Handler(Looper.getMainLooper()).postDelayed({
             binding.edNewname.requestFocus()

@@ -3,6 +3,7 @@ package extensions.anbui.daydream.activity.project.settings
 import a.a.a.jC
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.window.OnBackInvokedDispatcher
@@ -22,6 +23,14 @@ class ThemeSettings : AppCompatActivity() {
     private lateinit var binding: ActivityDaydreamThemeSettingsBinding
     private lateinit var material3LibraryManager : Material3LibraryManager
     private lateinit var compatLibraryBean : ProjectLibraryBean
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressedDispatcher.onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +100,8 @@ class ThemeSettings : AppCompatActivity() {
         }
 
         if (currentTheme == Configs.material2Theme) {
-            binding.lnDynamiccolor.visibility = GONE
+            binding.lnDynamiccolor.setAlpha(0.5f)
+            binding.lnDynamiccolor.setEnabled(false)
         }
 
         val currentDayNight: Int = DayDreamProjectSettings.getThemeDayNight(projectID)
@@ -116,7 +126,8 @@ class ThemeSettings : AppCompatActivity() {
                         DayDreamProjectSettings.setTheme(projectID,
                             Configs.material2Theme)
 
-                        binding.lnDynamiccolor.visibility = GONE
+                        binding.lnDynamiccolor.setAlpha(0.5f)
+                        binding.lnDynamiccolor.setEnabled(false)
                         material3LibraryManager.appCombatLibraryBean.configurations["material3"] =
                             false
                     }
@@ -125,7 +136,8 @@ class ThemeSettings : AppCompatActivity() {
                         DayDreamProjectSettings.setTheme(projectID,
                             Configs.material3Theme)
 
-                        binding.lnDynamiccolor.visibility = VISIBLE
+                        binding.lnDynamiccolor.setAlpha(1f)
+                        binding.lnDynamiccolor.setEnabled(true)
                         material3LibraryManager.appCombatLibraryBean.configurations["material3"] =
                             true
                     }
@@ -136,7 +148,8 @@ class ThemeSettings : AppCompatActivity() {
                             Configs.material3ExpressiveTheme
                         )
 
-                        binding.lnDynamiccolor.visibility = VISIBLE
+                        binding.lnDynamiccolor.setAlpha(1f)
+                        binding.lnDynamiccolor.setEnabled(true)
                         material3LibraryManager.appCombatLibraryBean.configurations["material3"] =
                             true
                     }
@@ -174,7 +187,7 @@ class ThemeSettings : AppCompatActivity() {
         binding.selectM2.setEnabled(isEnable)
         binding.selectM3.setEnabled(isEnable)
         binding.selectM3e.setEnabled(isEnable)
-        binding.swDynamiccolor.setEnabled(isEnable)
+        binding.lnDynamiccolor.setEnabled(isEnable)
         binding.selectDay.setEnabled(isEnable)
         binding.selectNight.setEnabled(isEnable)
         binding.selectDaynight.setEnabled(isEnable)

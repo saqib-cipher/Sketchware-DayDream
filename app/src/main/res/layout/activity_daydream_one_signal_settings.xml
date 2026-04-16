@@ -15,22 +15,13 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/DayDream.CollapsingToolbarLarge"
             app:title="OneSignal"
             app:subtitle="Settings">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                style="@style/DayDram.CollapsingMaterialToolbar"
+                android:id="@+id/toolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -45,13 +36,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="116dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_appid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp"
                 android:hint="Your App ID">
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_appid"
@@ -63,9 +55,9 @@
                 android:id="@+id/ln_autoinitialize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/item_shape_single_high"
                 android:layout_marginVertical="16dp"
-                android:paddingHorizontal="16dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -105,7 +97,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingVertical="16dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -128,7 +120,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="?attr/colorSurface"
+        android:background="?attr/colorSurfaceContainerLow"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.card.MaterialCardView
@@ -136,8 +128,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        app:cardCornerRadius="25dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:cardCornerRadius="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -146,7 +138,9 @@
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="15dp">
+            android:paddingVertical="16dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="20dp">
 
             <TextView
                 android:layout_width="0dp"

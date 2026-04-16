@@ -3,7 +3,6 @@ package extensions.anbui.daydream.activity.project.git;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,7 +23,6 @@ import extensions.anbui.daydream.file.FileUtils;
 import extensions.anbui.daydream.git.DayDreamGitConfigs;
 import extensions.anbui.daydream.git.GitApplyUtils;
 import extensions.anbui.daydream.git.GitUtils;
-import extensions.anbui.daydream.tools.ToolCore;
 import pro.sketchware.R;
 import pro.sketchware.activities.main.activities.MainActivity;
 import pro.sketchware.databinding.ActivityDaydreamGitCloneBinding;
@@ -36,27 +34,12 @@ public class GitCloneActivity extends AppCompatActivity {
     private ActivityDaydreamGitCloneBinding binding;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        menu.add(1, 1, 1, getString(R.string.common_word_create)).setShortcut('3', 'c').setIcon(R.drawable.ic_mtrl_check).setShowAsAction(1);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        return switch (item.getItemId()) {
-            case 1 -> {
-                projectID = String.valueOf(ToolCore.getLastID() + 1);
-                startCloneProject();
-                yield true;
-            }
-            case android.R.id.home -> {
-                onBackPressed();
-                yield true;
-            }
-            default -> super.onOptionsItemSelected(item);
-        };
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -68,6 +51,7 @@ public class GitCloneActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.btnDone.setOnClickListener(v -> startCloneProject());
     }
 
     @Override

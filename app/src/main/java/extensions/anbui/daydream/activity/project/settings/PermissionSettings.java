@@ -1,6 +1,7 @@
 package extensions.anbui.daydream.activity.project.settings;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,15 @@ public class PermissionSettings extends AppCompatActivity {
 
     private String projectID;
     private ActivityDaydreamPermissionSettingsBinding binding;
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getOnBackPressedDispatcher().onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

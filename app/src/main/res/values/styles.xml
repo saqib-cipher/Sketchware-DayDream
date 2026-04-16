@@ -113,4 +113,29 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowIsFloating">true</item>
     </style>
+
+    <style name="DayDram.CollapsingMaterialToolbar" parent="Widget.Material3.Toolbar">
+        <item name="theme">@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:elevation">0dp</item>
+        <item name="layout_collapseMode">pin</item>
+        <item name="navigationIcon">@drawable/arrow_back_24px</item>
+    </style>
+
+    <style name="DayDream.CollapsingToolbarLarge" parent="Widget.Material3.CollapsingToolbar.Large">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/collapsingToolbarLayoutLargeSize</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
+        <item name="android:background">?attr/colorSurfaceContainerLow</item>
+        <item name="contentScrim">?attr/colorSurfaceContainerLow</item>
+        <item name="statusBarScrim">?attr/colorSurfaceContainerLow</item>
+        <item name="collapsedTitleTextAppearance">@style/TextAppearance.Material3.TitleMedium</item>
+        <item name="expandedTitleTextAppearance">@style/TextAppearance.Material3.DisplaySmall</item>
+    </style>
+
+    <style name="DayDream.MaterialSwitch" parent="@style/Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbIcon">@drawable/switch_thumb_icon</item>
+    </style>
 </resources>
