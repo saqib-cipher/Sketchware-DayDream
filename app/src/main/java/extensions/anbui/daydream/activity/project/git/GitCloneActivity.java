@@ -1,5 +1,6 @@
 package extensions.anbui.daydream.activity.project.git;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,15 +15,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
+import dev.pranav.filepicker.FilePickerCallback;
+import dev.pranav.filepicker.FilePickerDialogFragment;
+import dev.pranav.filepicker.FilePickerOptions;
 import extensions.anbui.daydream.configs.Configs;
+import extensions.anbui.daydream.settings.FilePickerSettings;
 import extensions.anbui.daydream.ui.DialogUtils;
 import extensions.anbui.daydream.file.FileUtils;
 import extensions.anbui.daydream.git.DayDreamGitConfigs;
 import extensions.anbui.daydream.git.GitApplyUtils;
 import extensions.anbui.daydream.git.GitUtils;
+import extensions.anbui.daydream.git.ZipImportUtils;
 import pro.sketchware.R;
 import pro.sketchware.activities.main.activities.MainActivity;
 import pro.sketchware.databinding.ActivityDaydreamGitCloneBinding;
@@ -52,6 +61,75 @@ public class GitCloneActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
         binding.btnDone.setOnClickListener(v -> startCloneProject());
+        if (binding.btnImportZip != null) {
+            binding.btnImportZip.setOnClickListener(v -> pickZipForImport());
+        }
+        if (getIntent() != null && getIntent().hasExtra("sc_id")) {
+            projectID = getIntent().getStringExtra("sc_id");
+        }
+    }
+
+    private void pickZipForImport() {
+        // Use the same default Sketchware file picker that .swb backups use,
+        // restricted to .zip archives. This matches the import-flow UX users
+        // already know from "Restore backup".
+        FilePickerOptions options = new FilePickerOptions();
+        options.setMultipleSelection(false);
+        options.setExtensions(new String[]{"zip"});
+        options.setTitle("Select a project ZIP to import");
+        options.setInitialDirectory(FilePickerSettings.getLastOpenedFolder(this));
+
+        FilePickerCallback callback = new FilePickerCallback() {
+            @Override
+            public void onFilesSelected(@NotNull List<? extends File> files) {
+                if (files.isEmpty()) return;
+                File picked = files.get(0);
+                File parent = picked.getParentFile();
+                if (parent != null) {
+                    FilePickerSettings.setLastOpenedFolder(GitCloneActivity.this, parent.getAbsolutePath());
+                }
+                startZipImport(Uri.fromFile(picked));
+            }
+        };
+
+        new FilePickerDialogFragment(options, callback)
+                .show(getSupportFragmentManager(), "zip_picker");
+    }
+
+    private void startZipImport(Uri uri) {
+        if (projectID == null || projectID.isEmpty()) {
+            DialogUtils.oneDialog(this,
+                    "The problem has been detected",
+                    "Missing project id. Open this screen from a project to import a ZIP.",
+                    "OK", true, R.drawable.ic_mtrl_warning, true, null, null);
+            return;
+        }
+
+        View progressView = LayoutInflater.from(this).inflate(R.layout.progress_msg_box, null);
+        LinearLayout linearProgress = progressView.findViewById(R.id.layout_progress);
+        linearProgress.setPadding(0, 0, 0, 0);
+        TextView progressText = progressView.findViewById(R.id.tv_progress);
+        progressText.setText("Importing zip...");
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        new Thread(() -> {
+            boolean ok = ZipImportUtils.importZip(this, projectID, uri);
+            runOnUiThread(() -> {
+                progressDialog.dismiss();
+                if (ok) {
+                    startApplyProject();
+                } else {
+                    DialogUtils.oneDialog(this,
+                            "Error",
+                            "Could not import the selected ZIP file.",
+                            "OK", true, R.drawable.ic_mtrl_warning, true, null, null);
+                }
+            });
+        }).start();
     }
 
     @Override

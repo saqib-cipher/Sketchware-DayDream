@@ -99,8 +99,17 @@
                     android:layout_height="wrap_content"
                     android:autoLink="all"
                     android:linksClickable="true"
-                    android:text="Make sure the branch you set already exists on that repository." />
+                    android:text="Make sure the branch you set already exists on that repository. You can also import a project from a local ZIP file instead of cloning." />
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_import_zip"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Import from ZIP file"
+                app:icon="@drawable/ic_mtrl_download" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

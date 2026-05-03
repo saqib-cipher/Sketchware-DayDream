@@ -101,6 +101,17 @@ object ProjectFileManager {
             val fileName = filepath.toUri().lastPathSegment ?: return@forEach
 
             if (isCopyAll || usingLocalLibs.contains(fileName)) {
+                // If a library with the same name is already present in the destination,
+                // skip the copy. This avoids re-downloading/overwriting libraries the
+                // user already has locally and matches the user-facing requirement
+                // "check library if already exist no need to download again".
+                val destFile = java.io.File(destDir, fileName)
+                if (destFile.exists()) {
+                    Log.i(TAG, "localLibrary: Skip existing $fileName at ${destFile.absolutePath}")
+                    statusTextView?.let { updateStatus(it, "Skipping existing $fileName") }
+                    return@forEach
+                }
+
                 statusTextView?.let {
                     updateStatus(it, "Copying $fileName")
                 }

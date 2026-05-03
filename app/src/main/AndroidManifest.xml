@@ -73,6 +73,11 @@
             android:theme="@style/DayDreamTheme"
             android:exported="false" />
         <activity
+            android:name="extensions.anbui.daydream.activity.project.blocks.CodeToBlockActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/DayDreamTheme"
+            android:exported="false" />
+        <activity
             android:name="extensions.anbui.daydream.activity.project.DayDreamProjectTool"
             android:configChanges="orientation|screenSize"
             android:theme="@style/DayDreamTheme"
