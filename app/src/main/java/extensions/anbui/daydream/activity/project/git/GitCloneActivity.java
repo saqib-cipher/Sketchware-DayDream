@@ -1,5 +1,7 @@
 package extensions.anbui.daydream.activity.project.git;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +27,7 @@ import extensions.anbui.daydream.file.FileUtils;
 import extensions.anbui.daydream.git.DayDreamGitConfigs;
 import extensions.anbui.daydream.git.GitApplyUtils;
 import extensions.anbui.daydream.git.GitUtils;
+import extensions.anbui.daydream.git.ZipImportUtils;
 import pro.sketchware.R;
 import pro.sketchware.activities.main.activities.MainActivity;
 import pro.sketchware.databinding.ActivityDaydreamGitCloneBinding;
@@ -32,6 +37,14 @@ public class GitCloneActivity extends AppCompatActivity {
     private String TAG = Configs.universalTAG + "GitCloneActivity";
     private String projectID;
     private ActivityDaydreamGitCloneBinding binding;
+
+    private final ActivityResultLauncher<Intent> zipPicker =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result == null || result.getData() == null) return;
+                Uri uri = result.getData().getData();
+                if (uri == null) return;
+                startZipImport(uri);
+            });
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -52,6 +65,60 @@ public class GitCloneActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
         binding.btnDone.setOnClickListener(v -> startCloneProject());
+        if (binding.btnImportZip != null) {
+            binding.btnImportZip.setOnClickListener(v -> pickZipForImport());
+        }
+        if (getIntent() != null && getIntent().hasExtra("sc_id")) {
+            projectID = getIntent().getStringExtra("sc_id");
+        }
+    }
+
+    private void pickZipForImport() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
+                "application/zip",
+                "application/x-zip-compressed",
+                "application/octet-stream"
+        });
+        zipPicker.launch(intent);
+    }
+
+    private void startZipImport(Uri uri) {
+        if (projectID == null || projectID.isEmpty()) {
+            DialogUtils.oneDialog(this,
+                    "The problem has been detected",
+                    "Missing project id. Open this screen from a project to import a ZIP.",
+                    "OK", true, R.drawable.ic_mtrl_warning, true, null, null);
+            return;
+        }
+
+        View progressView = LayoutInflater.from(this).inflate(R.layout.progress_msg_box, null);
+        LinearLayout linearProgress = progressView.findViewById(R.id.layout_progress);
+        linearProgress.setPadding(0, 0, 0, 0);
+        TextView progressText = progressView.findViewById(R.id.tv_progress);
+        progressText.setText("Importing zip...");
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        new Thread(() -> {
+            boolean ok = ZipImportUtils.importZip(this, projectID, uri);
+            runOnUiThread(() -> {
+                progressDialog.dismiss();
+                if (ok) {
+                    startApplyProject();
+                } else {
+                    DialogUtils.oneDialog(this,
+                            "Error",
+                            "Could not import the selected ZIP file.",
+                            "OK", true, R.drawable.ic_mtrl_warning, true, null, null);
+                }
+            });
+        }).start();
     }
 
     @Override

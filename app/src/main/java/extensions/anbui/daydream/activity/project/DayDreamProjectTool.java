@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
+import extensions.anbui.daydream.activity.project.blocks.CodeToBlockActivity;
 import extensions.anbui.daydream.activity.project.git.DayDreamGitActionsActivity;
 import extensions.anbui.daydream.library.LibraryUtils;
 import extensions.anbui.daydream.project.DRProjectTracker;
@@ -65,6 +66,12 @@ public class DayDreamProjectTool extends AppCompatActivity {
             binding.lnGit.setAlpha(0.5f);
             binding.lnGit.setEnabled(false);
         }
+
+        binding.lnCodeToBlock.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CodeToBlockActivity.class);
+            intent.putExtra(CodeToBlockActivity.EXTRA_SC_ID, projectID);
+            startActivity(intent);
+        });
     }
 
     private void backup() {
