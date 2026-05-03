@@ -64,6 +64,14 @@ public class GitApplyUtils {
 
     /**
      * Detects what kind of project the repo at {@code repoRoot} contains.
+     *
+     * <p>Detection is intentionally permissive: anything that even loosely
+     * resembles an Android project (a manifest, a Gradle script, a {@code
+     * src/main} tree, or even just bare {@code .java}/{@code .kt} sources or
+     * an Android-style {@code res} folder) is treated as
+     * {@link RepoLayout#ANDROID_PROJECT}. {@link #applyAndroidProject} can
+     * always allocate a fresh sc_id and import what it finds, so we'd rather
+     * try-and-mostly-succeed than reject the repo with "unknown layout".
      */
     public static RepoLayout detectLayout(String repoRoot) {
         // Sketchware-pushed layout: /project/data + /project/resources (optional)
@@ -78,16 +86,60 @@ public class GitApplyUtils {
             return RepoLayout.SKETCHWARE_AT_ROOT;
         }
 
-        // Standard Android Studio / Gradle project
-        if (FileUtils.isFileExist(repoRoot + "/app/src/main/AndroidManifest.xml")
-                || FileUtils.isFileExist(repoRoot + "/build.gradle")
-                || FileUtils.isFileExist(repoRoot + "/build.gradle.kts")
-                || FileUtils.isFileExist(repoRoot + "/settings.gradle")
-                || FileUtils.isFileExist(repoRoot + "/settings.gradle.kts")) {
+        // Standard Android Studio / Gradle project, or any subset of one.
+        // We accept a broad set of "this looks Android-ish" signals so that
+        // partial / unconventional repos can still be imported.
+        String[] androidSignals = {
+                "/app/src/main/AndroidManifest.xml",
+                "/src/main/AndroidManifest.xml",
+                "/AndroidManifest.xml",
+                "/build.gradle",
+                "/build.gradle.kts",
+                "/settings.gradle",
+                "/settings.gradle.kts",
+                "/app/build.gradle",
+                "/app/build.gradle.kts",
+                "/app/src/main/java",
+                "/app/src/main/kotlin",
+                "/src/main/java",
+                "/app/src/main/res",
+                "/src/main/res",
+                "/res"
+        };
+        for (String s : androidSignals) {
+            if (FileUtils.isFileExist(repoRoot + s)) {
+                return RepoLayout.ANDROID_PROJECT;
+            }
+        }
+
+        // Last-resort heuristic: if the repo root contains *any* Java/Kotlin
+        // source we still want to import it as a new project rather than
+        // bailing. NewProjectFromImport will copy what's there and leave the
+        // user with a fresh project they can edit.
+        if (containsJavaOrKotlin(new File(repoRoot), 4)) {
             return RepoLayout.ANDROID_PROJECT;
         }
 
         return RepoLayout.UNKNOWN;
+    }
+
+    private static boolean containsJavaOrKotlin(File dir, int depthLimit) {
+        if (dir == null || depthLimit < 0 || !dir.isDirectory()) return false;
+        File[] children = dir.listFiles();
+        if (children == null) return false;
+        for (File child : children) {
+            if (child.isFile()) {
+                String name = child.getName();
+                if (name.endsWith(".java") || name.endsWith(".kt")) return true;
+            } else if (child.isDirectory()) {
+                // Skip VCS / build artefacts to keep this cheap.
+                String dn = child.getName();
+                if (".git".equals(dn) || "build".equals(dn) || ".gradle".equals(dn)
+                        || ".idea".equals(dn) || "node_modules".equals(dn)) continue;
+                if (containsJavaOrKotlin(child, depthLimit - 1)) return true;
+            }
+        }
+        return false;
     }
 
     private static boolean applySketchware(String projectID, String projectFolder,

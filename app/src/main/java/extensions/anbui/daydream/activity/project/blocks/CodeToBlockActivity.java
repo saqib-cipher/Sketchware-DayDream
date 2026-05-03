@@ -86,13 +86,26 @@ public class CodeToBlockActivity extends AppCompatActivity {
         String paletteColorText = binding.etPaletteColor.getText() == null ? "" : binding.etPaletteColor.getText().toString().trim();
         String blockColorText = binding.etBlockColor.getText() == null ? "" : binding.etBlockColor.getText().toString().trim();
 
-        if (TextUtils.isEmpty(name)) {
-            Toast.makeText(this, "Block name is required", Toast.LENGTH_LONG).show();
+        // The user asked for "no need to fill everything": only the code field
+        // is meaningful when converting an arbitrary snippet into a block.
+        // Synthesize sensible defaults for everything else so the user can
+        // paste code and immediately Save.
+        if (TextUtils.isEmpty(code) && TextUtils.isEmpty(name)) {
+            Toast.makeText(this, "Paste some code (or set a block name) first",
+                    Toast.LENGTH_LONG).show();
             return null;
         }
+        if (TextUtils.isEmpty(name)) {
+            name = "block_" + Long.toString(System.currentTimeMillis(), 36);
+        }
         if (TextUtils.isEmpty(spec)) {
-            // A reasonable default: use the name as the on-block label.
-            spec = name;
+            // For raw-code blocks, mirror Sketchware's built-in "add source
+            // directly" pattern so the block is usable right away.
+            if (!TextUtils.isEmpty(code)) {
+                spec = "add source directly %s.inputOnly";
+            } else {
+                spec = name;
+            }
         }
 
         ExtraBlockInfo info = new ExtraBlockInfo();

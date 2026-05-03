@@ -26,6 +26,11 @@
         android:title="Clean up" />
 
     <item
+        android:id="@+id/code_to_block"
+        android:icon="@drawable/wand_stars_24px"
+        android:title="Code to block" />
+
+    <item
         android:id="@+id/app_settings"
         android:icon="@drawable/ic_mtrl_settings"
         android:title="Settings" />
