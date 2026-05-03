@@ -16,13 +16,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import dev.pranav.filepicker.FilePickerCallback;
+import dev.pranav.filepicker.FilePickerDialogFragment;
+import dev.pranav.filepicker.FilePickerOptions;
 import extensions.anbui.daydream.configs.Configs;
 import extensions.anbui.daydream.file.FileUtils;
+import extensions.anbui.daydream.settings.FilePickerSettings;
 import extensions.anbui.daydream.ui.DialogUtils;
 import mod.hey.studios.editor.manage.block.ExtraBlockInfo;
 import pro.sketchware.R;
@@ -76,6 +82,102 @@ public class CodeToBlockActivity extends AppCompatActivity {
 
         binding.btnSave.setOnClickListener(v -> saveBlock());
         binding.btnPreview.setOnClickListener(v -> previewBlock());
+        binding.btnLoadFile.setOnClickListener(v -> pickCodeFile());
+    }
+
+    /**
+     * Opens the standard Sketchware file picker, restricted to source-like
+     * files, and loads the selected file's contents into the code editor.
+     * The block name + spec are auto-suggested from the filename so the user
+     * can save immediately without filling anything else in.
+     */
+    private void pickCodeFile() {
+        FilePickerOptions options = new FilePickerOptions();
+        options.setMultipleSelection(false);
+        options.setExtensions(new String[]{"java", "kt", "xml"});
+        options.setTitle("Select a code file to load");
+        options.setInitialDirectory(FilePickerSettings.getLastOpenedFolder(this));
+
+        FilePickerCallback callback = new FilePickerCallback() {
+            @Override
+            public void onFilesSelected(@NotNull List<? extends File> files) {
+                if (files.isEmpty()) return;
+                File picked = files.get(0);
+                File parent = picked.getParentFile();
+                if (parent != null) {
+                    FilePickerSettings.setLastOpenedFolder(
+                            CodeToBlockActivity.this, parent.getAbsolutePath());
+                }
+                loadCodeFromFile(picked);
+            }
+        };
+
+        new FilePickerDialogFragment(options, callback)
+                .show(getSupportFragmentManager(), "code_picker");
+    }
+
+    private void loadCodeFromFile(File file) {
+        try {
+            String contents = FileUtils.readTextFile(file.getAbsolutePath());
+            if (contents == null) contents = "";
+            binding.etCode.setText(contents);
+
+            // Auto-suggest a block name and spec from the filename when the
+            // user hasn't already typed something. We keep existing values to
+            // avoid overwriting user input.
+            String fileName = file.getName();
+            String base = stripExtension(fileName);
+            String suggestedName = sanitizeBlockName(base);
+
+            if (binding.etName.getText() == null
+                    || TextUtils.isEmpty(binding.etName.getText().toString().trim())) {
+                binding.etName.setText(suggestedName);
+            }
+            if (binding.etSpec.getText() == null
+                    || TextUtils.isEmpty(binding.etSpec.getText().toString().trim())) {
+                // Use the same "add source directly" pattern as raw-code blocks
+                // — the loaded file becomes a single ASDB-style snippet.
+                binding.etSpec.setText("add source directly %s.inputOnly");
+            }
+
+            Toast.makeText(this,
+                    "Loaded " + fileName + " (" + contents.length() + " chars)",
+                    Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e(TAG, "loadCodeFromFile: " + e.getMessage());
+            DialogUtils.oneDialog(this,
+                    "Error",
+                    "Could not read the selected file: " + e.getMessage(),
+                    "OK", true, R.drawable.ic_mtrl_warning, true, null, null);
+        }
+    }
+
+    private static String stripExtension(String fileName) {
+        int dot = fileName.lastIndexOf('.');
+        return dot > 0 ? fileName.substring(0, dot) : fileName;
+    }
+
+    /**
+     * Block names are used as map keys / palette identifiers, so we keep them
+     * to a conservative ASCII subset. Anything else collapses to underscore.
+     */
+    private static String sanitizeBlockName(String input) {
+        if (TextUtils.isEmpty(input)) {
+            return "block_" + Long.toString(System.currentTimeMillis(), 36);
+        }
+        StringBuilder sb = new StringBuilder(input.length());
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if ((c >= 'a' && c <= 'z')
+                    || (c >= 'A' && c <= 'Z')
+                    || (c >= '0' && c <= '9')
+                    || c == '_') {
+                sb.append(c);
+            } else {
+                sb.append('_');
+            }
+        }
+        return sb.toString();
     }
 
     private ExtraBlockInfo collectBlock() {
