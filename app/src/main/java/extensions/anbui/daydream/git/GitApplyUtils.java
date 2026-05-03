@@ -152,24 +152,24 @@ public class GitApplyUtils {
     }
 
     /**
-     * For a generic Android project we cannot import it as a Sketchware project
-     * (Sketchware doesn't store raw Java sources). Instead we copy the project
-     * tree into the user's mysc/source folder so that it's available for review
-     * via the file explorer, and surface a helpful status message.
+     * For a generic Android project we cannot drop the import into the
+     * existing {@code projectID}'s data folder (Sketchware's data layout
+     * would conflict). Instead we allocate a brand new {@code sc_id} via
+     * {@link NewProjectFromImport}, register it with the project listing,
+     * and copy the imported source tree into the new project's
+     * {@code mysc/<sc_id>} folder so it appears alongside the user's other
+     * projects.
      */
     private static boolean applyAndroidProject(String projectID, String repoRoot, TextView statusTextView) {
-        try {
-            updateStatus(statusTextView, "Importing Android project sources...");
-            String dest = FileUtils.getInternalStorageDir() + Configs.projectMySourceFolderDir + projectID;
-            FileUtils.createDirectory(dest);
-            FileUtils.copyDirectory(repoRoot, dest);
-            updateStatus(statusTextView, "Imported sources to mysc/" + projectID);
-            // Don't run fixID — there's no Sketchware data to fix.
-            return true;
-        } catch (Exception e) {
-            Log.e(TAG, "applyAndroidProject: " + Objects.toString(e.getMessage(), "unknown error"));
+        updateStatus(statusTextView, "Importing as a new project...");
+        String newId = NewProjectFromImport.createAndImport(repoRoot, statusTextView);
+        if (newId == null) {
+            Log.e(TAG, "applyAndroidProject: NewProjectFromImport returned null");
             return false;
         }
+        Log.i(TAG, "applyAndroidProject: imported into new project id " + newId
+                + " (original staging id was " + projectID + ")");
+        return true;
     }
 
     private static void copyResourceIfExists(String projectID, String src, String dest,

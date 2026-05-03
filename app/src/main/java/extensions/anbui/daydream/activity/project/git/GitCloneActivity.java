@@ -1,6 +1,5 @@
 package extensions.anbui.daydream.activity.project.git;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,17 +10,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
+import java.util.List;
 import java.util.Objects;
 
+import dev.pranav.filepicker.FilePickerCallback;
+import dev.pranav.filepicker.FilePickerDialogFragment;
+import dev.pranav.filepicker.FilePickerOptions;
 import extensions.anbui.daydream.configs.Configs;
+import extensions.anbui.daydream.settings.FilePickerSettings;
 import extensions.anbui.daydream.ui.DialogUtils;
 import extensions.anbui.daydream.file.FileUtils;
 import extensions.anbui.daydream.git.DayDreamGitConfigs;
@@ -37,14 +41,6 @@ public class GitCloneActivity extends AppCompatActivity {
     private String TAG = Configs.universalTAG + "GitCloneActivity";
     private String projectID;
     private ActivityDaydreamGitCloneBinding binding;
-
-    private final ActivityResultLauncher<Intent> zipPicker =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result == null || result.getData() == null) return;
-                Uri uri = result.getData().getData();
-                if (uri == null) return;
-                startZipImport(uri);
-            });
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -74,15 +70,30 @@ public class GitCloneActivity extends AppCompatActivity {
     }
 
     private void pickZipForImport() {
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{
-                "application/zip",
-                "application/x-zip-compressed",
-                "application/octet-stream"
-        });
-        zipPicker.launch(intent);
+        // Use the same default Sketchware file picker that .swb backups use,
+        // restricted to .zip archives. This matches the import-flow UX users
+        // already know from "Restore backup".
+        FilePickerOptions options = new FilePickerOptions();
+        options.setMultipleSelection(false);
+        options.setExtensions(new String[]{"zip"});
+        options.setTitle("Select a project ZIP to import");
+        options.setInitialDirectory(FilePickerSettings.getLastOpenedFolder(this));
+
+        FilePickerCallback callback = new FilePickerCallback() {
+            @Override
+            public void onFilesSelected(@NotNull List<? extends File> files) {
+                if (files.isEmpty()) return;
+                File picked = files.get(0);
+                File parent = picked.getParentFile();
+                if (parent != null) {
+                    FilePickerSettings.setLastOpenedFolder(GitCloneActivity.this, parent.getAbsolutePath());
+                }
+                startZipImport(Uri.fromFile(picked));
+            }
+        };
+
+        new FilePickerDialogFragment(options, callback)
+                .show(getSupportFragmentManager(), "zip_picker");
     }
 
     private void startZipImport(Uri uri) {

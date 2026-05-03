@@ -33,6 +33,7 @@ import a.a.a.wq;
 import a.a.a.yB;
 import extensions.anbui.daydream.activity.project.DayDreamBackupTool;
 import extensions.anbui.daydream.activity.project.DayDreamProjectTool;
+import extensions.anbui.daydream.activity.project.blocks.CodeToBlockActivity;
 import extensions.anbui.daydream.activity.project.git.DayDreamGitActionsActivity;
 import extensions.anbui.daydream.library.LibraryUtils;
 import extensions.anbui.daydream.settings.DRSettings;
@@ -335,6 +336,13 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
             binding.projectGit.setAlpha(0.5f);
             binding.tvProjectGit.setText("Git (Requires Android 13+)");
         }
+
+        binding.projectCodeToBlock.setOnClickListener(v -> {
+            Intent intent = new Intent(activity, CodeToBlockActivity.class);
+            intent.putExtra(CodeToBlockActivity.EXTRA_SC_ID, yB.c(projectMap, "sc_id"));
+            activity.startActivity(intent);
+            projectOptionsBSD.dismiss();
+        });
 
         binding.projectDelete.setOnClickListener(v -> {
             RemoveCore.showDialogNow(activity, yB.c(projectMap, "sc_id"));
