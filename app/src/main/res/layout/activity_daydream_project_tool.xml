@@ -185,13 +185,13 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Code to Block"
+                        android:text="Auto Block Generator"
                         android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Convert any code into a Sketchware palette block."
+                        android:text="Convert Java code into Sketchware blocks automatically."
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>

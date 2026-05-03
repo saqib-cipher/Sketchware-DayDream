@@ -15,8 +15,8 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             style="@style/DayDream.CollapsingToolbarLarge"
-            app:title="Code to Block"
-            app:subtitle="Convert code into a Sketchware palette block."
+            app:title="Auto Block Generator"
+            app:subtitle="Convert Java code into Sketchware blocks automatically."
             app:toolbarId="@id/toolbar">
 
             <com.google.android.material.appbar.MaterialToolbar
@@ -42,68 +42,17 @@
             android:paddingBottom="16dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_name"
+                android:id="@+id/til_palette"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Block name (unique identifier)">
+                android:hint="Palette name (folder under .sketchware/resources/block)">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_name"
+                    android:id="@+id/et_palette"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_spec"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Spec (label shown on the block, e.g. 'show toast %s')">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_spec"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Type (e.g. ' ' for regular, 'b' for boolean, 's' for string)">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_palette_color"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Palette color (e.g. #8a55d7)">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_palette_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_block_color"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:hint="Block color (e.g. #8a55d7)">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_block_color"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="My Block" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -112,14 +61,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Load from file" />
+                android:text="Load Java/Kotlin/XML file" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Generated Java code (use %s, %d, %b for inputs)">
+                android:hint="Paste your Java code here">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_code"
@@ -127,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="top|start"
                     android:inputType="textMultiLine"
-                    android:minLines="6" />
+                    android:minLines="10" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -146,12 +95,20 @@
                     android:text="Preview JSON" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_save"
+                    android:id="@+id/btn_generate"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:text="Save to palette" />
+                    android:text="Generate blocks" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_result"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="14sp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

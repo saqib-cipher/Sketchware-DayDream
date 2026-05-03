@@ -285,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:gravity="center_vertical"
-                    android:text="Code to Block"
+                    android:text="Auto Block Generator"
                     android:textAppearance="?attr/textAppearanceBodyLarge"
                     app:drawableEndCompat="@drawable/ic_mtrl_arrow_right" />
 

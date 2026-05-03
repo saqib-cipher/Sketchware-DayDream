@@ -26,9 +26,9 @@
         android:title="Clean up" />
 
     <item
-        android:id="@+id/code_to_block"
+        android:id="@+id/auto_block_generator"
         android:icon="@drawable/wand_stars_24px"
-        android:title="Code to block" />
+        android:title="Auto block generator" />
 
     <item
         android:id="@+id/app_settings"

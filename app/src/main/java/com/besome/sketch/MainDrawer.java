@@ -26,7 +26,7 @@ import a.a.a.mB;
 import dev.chrisbanes.insetter.Insetter;
 import dev.chrisbanes.insetter.Side;
 import extensions.anbui.daydream.activity.DayDreamCleanUp;
-import extensions.anbui.daydream.activity.project.blocks.CodeToBlockActivity;
+import extensions.anbui.daydream.activity.project.blocks.AutoBlockGeneratorActivity;
 import extensions.anbui.daydream.activity.project.settings.DayDreamUniversalSettingsActivity;
 import mod.hilal.saif.activities.tools.AppSettings;
 import pro.sketchware.R;
@@ -107,11 +107,8 @@ public class MainDrawer extends NavigationView {
             activity.startActivityForResult(intent, 105);
         } else if (id == R.id.daydream_cleanup) {
             activity.startActivity(new Intent(activity, DayDreamCleanUp.class));
-        } else if (id == R.id.code_to_block) {
-            // Global access: launch without EXTRA_SC_ID. CodeToBlockActivity
-            // handles the no-project-context case by writing to a shared
-            // palette under .sketchware/daydream_palette/custom_blocks.json.
-            Intent intent = new Intent(activity, CodeToBlockActivity.class);
+        } else if (id == R.id.auto_block_generator) {
+            Intent intent = new Intent(activity, AutoBlockGeneratorActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             activity.startActivity(intent);
         } else if (id == R.id.app_settings) {

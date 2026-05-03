@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -88,43 +89,18 @@ public class GitCloneActivity extends AppCompatActivity {
                 if (parent != null) {
                     FilePickerSettings.setLastOpenedFolder(GitCloneActivity.this, parent.getAbsolutePath());
                 }
-                confirmAndStartZipImport(picked);
+                // Post the import to the next looper tick so the picker
+                // DialogFragment finishes dismissing before we attach the
+                // progress dialog. Without this, "nothing happens" because
+                // the new dialog races with the picker's own dismiss.
+                Toast.makeText(GitCloneActivity.this,
+                        "Importing " + picked.getName() + "...", Toast.LENGTH_SHORT).show();
+                binding.getRoot().post(() -> startZipImport(Uri.fromFile(picked)));
             }
         };
 
         new FilePickerDialogFragment(options, callback)
                 .show(getSupportFragmentManager(), "zip_picker");
-    }
-
-    private void confirmAndStartZipImport(File picked) {
-        // The default Sketchware file picker fires onFilesSelected as soon as
-        // the user taps a file — there is no built-in confirm step. Show one
-        // ourselves so users can back out of an accidental selection before
-        // we start unpacking and creating projects.
-        String name = picked.getName();
-        long bytes = picked.length();
-        String size = humanReadableSize(bytes);
-        String message = "Selected: " + name
-                + "\nSize: " + size
-                + "\n\nImport this ZIP as a project?";
-
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Confirm ZIP import")
-                .setMessage(message)
-                .setIcon(R.drawable.ic_mtrl_folder)
-                .setPositiveButton("Import", (d, w) -> startZipImport(Uri.fromFile(picked)))
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
-    }
-
-    private static String humanReadableSize(long bytes) {
-        if (bytes < 1024) return bytes + " B";
-        double kb = bytes / 1024.0;
-        if (kb < 1024) return String.format(java.util.Locale.US, "%.1f KB", kb);
-        double mb = kb / 1024.0;
-        if (mb < 1024) return String.format(java.util.Locale.US, "%.1f MB", mb);
-        double gb = mb / 1024.0;
-        return String.format(java.util.Locale.US, "%.2f GB", gb);
     }
 
     private void startZipImport(Uri uri) {
